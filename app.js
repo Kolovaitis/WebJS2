@@ -49,5 +49,3 @@ app.post("/post/:id", function (request, response) {
     addCommentUsecase.invoke({text: body.text, author: body.author, postId: request.params.id})
     response.redirect(request.url)
 })
-
-app.listen(3000)
