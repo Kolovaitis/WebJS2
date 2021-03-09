@@ -5,6 +5,7 @@ const AddPostUsecase = require("./domain/usecases/addPostUsecase")
 const GetPostsUsecase = require("./domain/usecases/getPostsUsecase")
 const GetPostUsecase = require("./domain/usecases/getPostUsecase")
 const AddCommentUsecase = require("./domain/usecases/addCommentUsecase")
+const PORT = process.env.PORT || 5000
 
 // can't find di
 const datasource = new StaticDatasource()
@@ -49,3 +50,5 @@ app.post("/post/:id", function (request, response) {
     addCommentUsecase.invoke({text: body.text, author: body.author, postId: request.params.id})
     response.redirect(request.url)
 })
+
+app.listen(PORT)
