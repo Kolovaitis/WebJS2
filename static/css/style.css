@@ -1,0 +1,5 @@
+.jumbotron-photo img{
+    object-fit: cover;
+    width: 320px;
+    height: 180px;
+}

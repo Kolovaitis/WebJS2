@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All posts</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="css/site.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Posts</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-4">
+            <button type="button" class="btn btn-info navbar-btn navbar-right" data-toggle="modal" data-target="#myModal">
+                Create post
+            </button>
+        </div>
+    </div>
+</nav>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <form name="newPost" action="" method="post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Create post</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <label>Title</label>
+                            <input type="text" class="form-control" name="name" placeholder="Title">
+                        </div>
+                        <div class="col-xs-6">
+                            <label>Image</label>
+                            <input type="text" class="form-control" name="image" placeholder="Image url">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label>Text</label>
+                            <textarea class="form-control" rows="3" name="description"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Create</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="col-md-6 col-sm-offset-3">
+<% for(var i = 0; i < posts.length;i++) { %>
+<a href="/post/<%= posts[i].id %>">
+    <div class="jumbotron">
+        <div class="jumbotron-photo"><img src="<%= posts[i].image %>"></div>
+        <div class="jumbotron-contents">
+            <h1><%= posts[i].name %></h1>
+               </div>
+    </div>
+</a>
+<% } %>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+<html>
