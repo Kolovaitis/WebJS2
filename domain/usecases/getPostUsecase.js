@@ -1,8 +1,7 @@
 class GetPostUsecase{
 
-    constructor(postsRepository, commentsRepository) {
+    constructor(postsRepository) {
         this.postsRepository = postsRepository
-        this.commentsRepository = commentsRepository
     }
 
     invoke(postId){
@@ -10,8 +9,6 @@ class GetPostUsecase{
         if(post === undefined) {
             throw "not found"
         }
-        let comments = this.commentsRepository.getComments(postId)
-        post.comments = comments
         return post
     }
 }
