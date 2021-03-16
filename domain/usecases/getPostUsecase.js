@@ -7,6 +7,9 @@ class GetPostUsecase{
 
     invoke(postId){
         let post = this.postsRepository.getPost(postId)
+        if(post === undefined) {
+            throw "not found"
+        }
         let comments = this.commentsRepository.getComments(postId)
         post.comments = comments
         return post

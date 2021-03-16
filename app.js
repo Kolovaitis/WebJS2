@@ -22,33 +22,57 @@ const express = require("express")
 const app = express()
 
 const bodyParser = require('body-parser')
-app.use(bodyParser.urlencoded({extended: true}))
-app.set("view engine", "ejs")
+app.use(bodyParser.json())
+
 app.use(express.static("static"))
 
 app.get("/", function (request, response) {
-    let posts = getPostsUsecase.invoke()
-    response.render("main", {
-        posts: posts,
-    })
+    try {
+        let posts = getPostsUsecase.invoke()
+        response.json(posts)
+    }catch (e) {
+        response.status(500).send("internal server error");
+    }
 })
 
 app.post("/", function (request, response) {
     let body = request.body
-    addPostUsecase.invoke({name: body.name, description: body.description, image: body.image})
-    response.redirect(request.url)
+    try {
+        let post = {name: body.name, description: body.description, image: body.image}
+        if(post.description===undefined || post.name===undefined || post.image===undefined){
+            response.status(400).send("invalid parameters");
+        }
+        addPostUsecase.invoke(post)
+        response.end();
+    } catch (e) {
+        response.status(500).send("internal server error");
+    }
+
 })
 
 app.get("/post/:id", function (request, response) {
-    response.render("post", {
-        post: getPostUsecase.invoke(request.params.id),
-    })
+    try {
+        response.json(getPostUsecase.invoke(request.params.id))
+    } catch (e) {
+        if (e === "not found") {
+            response.status(404).send("not found")
+        }
+        response.status(500).send("internal server error")
+    }
 })
 
 app.post("/post/:id", function (request, response) {
     let body = request.body
-    addCommentUsecase.invoke({text: body.text, author: body.author, postId: request.params.id})
-    response.redirect(request.url)
+    try {
+        let comment = {text: body.text, author: body.author, postId: request.params.id}
+        if(comment.description===undefined || comment.name===undefined || comment.image===undefined){
+            response.status(400).send("invalid parameters");
+        }
+        addCommentUsecase.invoke(comment)
+        response.end();
+    } catch (e) {
+        response.status(500).send("internal server error");
+    }
 })
 
 app.listen(PORT)
