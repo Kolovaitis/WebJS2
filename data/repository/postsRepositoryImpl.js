@@ -7,8 +7,8 @@ class PostsRepositoryImpl extends PostsRepository {
         this.datasource = datasource
     }
 
-    get posts() {
-        return this.datasource.posts
+    async getPosts() {
+        return await this.datasource.posts
     }
 
     addPost(post) {
