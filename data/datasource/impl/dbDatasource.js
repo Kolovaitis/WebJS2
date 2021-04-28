@@ -19,7 +19,7 @@ class DBDatasource extends DatasourceBase {
 
     async getComments(postId) {
         const client = await pool.connect()
-        const result = await client.query('SELECT * FROM comments')
+        const result = await client.query('SELECT * FROM comments where post_id = '+postId)
         console.log(result)
         return (result) ? result.rows : null
     }
