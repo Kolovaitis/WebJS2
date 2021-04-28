@@ -4,6 +4,7 @@ class AddPostUsecase {
     }
 
     async invoke(post){
+        console.log("add post usecase")
         await this.postsRepository.addPost(post);
     }
 }

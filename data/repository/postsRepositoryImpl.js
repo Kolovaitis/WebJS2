@@ -13,6 +13,7 @@ class PostsRepositoryImpl extends PostsRepository {
     }
 
     async addPost(post) {
+        console.log("posts repository")
        await this.datasource.addPost(post.name, post.description, post.image)
     }
 

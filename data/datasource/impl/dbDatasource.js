@@ -32,8 +32,9 @@ class DBDatasource extends DatasourceBase {
     }
 
     async addPost(name, description, image) {
+        console.log("datasource")
         const client = await pool.connect()
-        const result = await client.query('INSERT INTO posts (name, description, image) VALUES (' + name + ', ' + description + ', ' + image + ')')
+        const result = await client.query('INSERT INTO posts (name, description, image) VALUES (' + name + ', ' + description + ', ' + image + ');')
         console.log(result)
         return result
     }
