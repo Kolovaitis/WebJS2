@@ -29,21 +29,20 @@ app.use(bodyParser.json())
 
 app.use(express.static("static"))
 
-app.get("/all", function (request, response) {
-    let posts = getPostsUsecase.invoke().then(() => {
+app.get("/all", async function (request, response) {
+    try {
+        let posts = await getPostsUsecase.invoke()
         response.json(posts)
-        response.end()
-    }).catch((e) => {
+    }catch (e) {
         response.status(500).send("internal server error");
-    })
-
+    }
 })
 
 app.post("/", function (request, response) {
     let body = request.body
     try {
         let post = {name: body.name, description: body.description, image: body.image}
-        if (post.description === undefined || post.name === undefined || post.image === undefined) {
+        if(post.description===undefined || post.name===undefined || post.image===undefined){
             response.status(400).send("invalid parameters");
         }
         addPostUsecase.invoke(post)
@@ -76,7 +75,7 @@ app.post("/post/:id", function (request, response) {
     let body = request.body
     try {
         let comment = {text: body.text, author: body.author, postId: request.params.id}
-        if (comment.description === undefined || comment.name === undefined || comment.image === undefined) {
+        if(comment.description===undefined || comment.name===undefined || comment.image===undefined){
             response.status(400).send("invalid parameters");
         }
         addCommentUsecase.invoke(comment)
