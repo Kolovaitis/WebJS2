@@ -10,7 +10,7 @@ const AddCommentUsecase = require("./domain/usecases/addCommentUsecase")
 const PORT = process.env.PORT || 5000
 const secretKey = "mern-secret-key";
 const { check, validationResult } = require("express-validator");
-const authMiddleware = require("middleware/auth.middleware");
+const authMiddleware = require("./middleware/auth.middleware");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
