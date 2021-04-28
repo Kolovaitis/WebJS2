@@ -83,7 +83,7 @@ app.get("/post/comments/:id",authMiddleware, function (request, response) {
     })
 })
 
-app.post("/post/:id", authMiddleware, function (request, response) {
+app.post("/comment/:id", authMiddleware, function (request, response) {
     let body = request.body
     let comment = {text: body.text, author: request.userId, postId: request.params.id}
     console.log(comment)
