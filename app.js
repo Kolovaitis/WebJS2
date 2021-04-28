@@ -85,7 +85,7 @@ app.get("/post/comments/:id",authMiddleware, function (request, response) {
 
 app.post("/post/:id", authMiddleware, function (request, response) {
     let body = request.body
-    let comment = {text: body.text, author: body.author, postId: request.params.id}
+    let comment = {text: body.text, author: request.user.email, postId: request.params.id}
     if (comment.description === undefined || comment.name === undefined || comment.image === undefined) {
         response.status(400).send("invalid parameters");
     }
@@ -119,8 +119,7 @@ app.post(
                     .json({ message: `User with email ${email} already exist` });
             }
             const hashPassword = await bcrypt.hash(password, 8);
-            const user ={ email, password: hashPassword };
-            await datasource.addUser(user);
+            await datasource.addUser(email, hashPassword);
             return res.status(200).json({ message: "User was created" });
         } catch (e) {
             console.log(e);

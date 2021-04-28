@@ -3411,9 +3411,10 @@ true posixrules
     <database id="502" parent="1" name="d3qvflp5khejbk">
       <ObjectId>6254275</ObjectId>
       <Owner>odweysbnjbtsor</Owner>
-      <IntrospectionStateNumber>10453692</IntrospectionStateNumber>
+      <IntrospectionStateNumber>10505083</IntrospectionStateNumber>
       <Current>1</Current>
       <Relations>sequence|table|6256490|6256492|1
+sequence|table|6488147|6484855|4
 </Relations>
     </database>
     <database id="503" parent="1" name="d3qvo810e9n8t">
@@ -18341,7 +18342,6 @@ true posixrules
     <role id="4097" parent="1" name="lzjyfwpjpkrgpx">
       <ObjectId>6257238</ObjectId>
       <ConnectionLimit>20</ConnectionLimit>
-      <CanLogin>1</CanLogin>
     </role>
     <role id="4098" parent="1" name="lzsqzwxcwtczdx">
       <ObjectId>6216157</ObjectId>
@@ -23964,7 +23964,6 @@ true posixrules
     <role id="5370" parent="1" name="xlypsqbowytasq">
       <ObjectId>6216165</ObjectId>
       <ConnectionLimit>20</ConnectionLimit>
-      <CanLogin>1</CanLogin>
     </role>
     <role id="5371" parent="1" name="xlzqonjytwdvye">
       <ObjectId>2742562</ObjectId>
@@ -25313,7 +25312,7 @@ UC/6254274
 </Acl>
       <StateNumber>10177467</StateNumber>
       <Owner>odweysbnjbtsor</Owner>
-      <IntrospectionStateNumber>10453695</IntrospectionStateNumber>
+      <IntrospectionStateNumber>10505085</IntrospectionStateNumber>
       <Current>1</Current>
     </schema>
     <extension id="5672" parent="502" name="plpgsql">
@@ -25423,17 +25422,23 @@ UC/6254274
       <StateNumber>10226041</StateNumber>
       <DataType>integer|0s</DataType>
     </sequence>
-    <table id="5685" parent="5671" name="posts">
+    <sequence id="5685" parent="5671" name="users_id_seq">
+      <ObjectId>6488147</ObjectId>
+      <Owner>odweysbnjbtsor</Owner>
+      <StateNumber>10504959</StateNumber>
+      <DataType>integer|0s</DataType>
+    </sequence>
+    <table id="5686" parent="5671" name="posts">
       <ObjectId>6256492</ObjectId>
       <Owner>odweysbnjbtsor</Owner>
       <StateNumber>10226041</StateNumber>
     </table>
-    <table id="5686" parent="5671" name="users">
+    <table id="5687" parent="5671" name="users">
       <ObjectId>6484855</ObjectId>
       <Owner>odweysbnjbtsor</Owner>
-      <StateNumber>10453656</StateNumber>
+      <StateNumber>10504959</StateNumber>
     </table>
-    <column id="5687" parent="5685" name="id">
+    <column id="5688" parent="5686" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
@@ -25441,48 +25446,49 @@ UC/6254274
       <DefaultExpression>nextval(&apos;posts_id_seq&apos;::regclass)</DefaultExpression>
       <TypeId>23</TypeId>
     </column>
-    <column id="5688" parent="5685" name="name">
+    <column id="5689" parent="5686" name="name">
       <Position>2</Position>
       <DataType>varchar|0s</DataType>
       <StateNumber>10226041</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="5689" parent="5685" name="description">
+    <column id="5690" parent="5686" name="description">
       <Position>3</Position>
       <DataType>varchar|0s</DataType>
       <StateNumber>10226041</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="5690" parent="5685" name="image">
+    <column id="5691" parent="5686" name="image">
       <Position>4</Position>
       <DataType>varchar|0s</DataType>
       <StateNumber>10226041</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="5691" parent="5686" name="email">
+    <column id="5692" parent="5687" name="email">
       <Position>1</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>10430376</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="5692" parent="5686" name="password">
+    <column id="5693" parent="5687" name="password">
       <Position>2</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>10430376</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="5693" parent="5686" name="id">
-      <Position>3</Position>
+    <column id="5694" parent="5687" name="id">
+      <Position>4</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>10453656</StateNumber>
+      <StateNumber>10504959</StateNumber>
+      <DefaultExpression>nextval(&apos;users_id_seq&apos;::regclass)</DefaultExpression>
       <TypeId>23</TypeId>
     </column>
-    <index id="5694" parent="5686" name="users_pkey">
-      <ObjectId>6485811</ObjectId>
-      <StateNumber>10453656</StateNumber>
+    <index id="5695" parent="5687" name="users_pkey">
+      <ObjectId>6488150</ObjectId>
+      <StateNumber>10504959</StateNumber>
       <ColNames>id</ColNames>
       <Unique>1</Unique>
       <Primary>1</Primary>
@@ -25490,9 +25496,9 @@ UC/6254274
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <key id="5695" parent="5686" name="users_pkey">
-      <ObjectId>6485812</ObjectId>
-      <StateNumber>10453656</StateNumber>
+    <key id="5696" parent="5687" name="users_pkey">
+      <ObjectId>6488151</ObjectId>
+      <StateNumber>10504959</StateNumber>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>users_pkey</UnderlyingIndexName>
