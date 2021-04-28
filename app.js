@@ -44,14 +44,14 @@ app.post("/post", function (request, response) {
     let post = {name: body.name, description: body.description, image: body.image}
     if (post.description === undefined || post.name === undefined || post.image === undefined) {
         response.status(400).send("invalid parameters");
+    }else {
+        addPostUsecase.invoke(post).then(function () {
+            response.end()
+        }).catch(function (e) {
+            response.status(500).send("internal server error");
+
+        })
     }
-    addPostUsecase.invoke(post).then(function () {
-        response.end()
-    }).catch(function (e) {
-        response.status(500).send("internal server error");
-
-    })
-
 
 })
 
