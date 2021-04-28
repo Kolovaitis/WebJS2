@@ -1,4 +1,5 @@
 const StaticDatasource = require("./data/datasource/impl/staticDatasource")
+const DBDatasource = require("./data/datasource/impl/dbDatasource")
 const PostsRepositoryImpl = require("./data/repository/postsRepositoryImpl")
 const CommentsRepositoryImpl = require("./data/repository/commentsRepositoryImpl")
 const AddPostUsecase = require("./domain/usecases/addPostUsecase")
@@ -9,7 +10,7 @@ const AddCommentUsecase = require("./domain/usecases/addCommentUsecase")
 const PORT = process.env.PORT || 5000
 
 // can't find di
-const datasource = new StaticDatasource()
+const datasource = new DBDatasource()
 const postsRepository = new PostsRepositoryImpl(datasource)
 const commentsRepository = new CommentsRepositoryImpl(datasource)
 const addPostUsecase = new AddPostUsecase(postsRepository)
