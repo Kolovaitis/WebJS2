@@ -3,8 +3,8 @@ class AddPostUsecase {
         this.postsRepository = postsRepository
     }
 
-    invoke(post){
-        this.postsRepository.addPost(post);
+    async invoke(post){
+        await this.postsRepository.addPost(post);
     }
 }
 module.exports = AddPostUsecase

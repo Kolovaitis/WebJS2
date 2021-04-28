@@ -3,8 +3,8 @@ class AddCommentUsecase {
         this.commentsRepository = commentsRepository
     }
 
-    invoke(comment){
-        this.commentsRepository.addComment(comment)
+    async invoke(comment){
+        await this.commentsRepository.addComment(comment)
     }
 }
 module.exports = AddCommentUsecase

@@ -4,9 +4,8 @@ class GetCommentsUsecase{
         this.commentsRepository = commentsRepository
     }
 
-    invoke(postId){
-        let comments = this.commentsRepository.getComments(postId)
-        return comments
+    async invoke(postId){
+        return await this.commentsRepository.getComments(postId)
     }
 }
 module.exports = GetCommentsUsecase

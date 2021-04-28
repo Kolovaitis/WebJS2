@@ -12,18 +12,12 @@ class PostsRepositoryImpl extends PostsRepository {
         return await this.datasource.getPosts()
     }
 
-    addPost(post) {
-        this.datasource.addPost(post.name, post.description, post.image)
+    async addPost(post) {
+       await this.datasource.addPost(post.name, post.description, post.image)
     }
 
-    getPost(postId) {
-        let posts = this.datasource.posts
-        for (let i=0;i<posts.length;i++) {
-            let post = posts[i]
-            if (post.id == postId) {
-                return post
-            }
-        }
+    async getPost(postId) {
+        return await this.datasource.getPost(postId)
     }
 }
 module.exports = PostsRepositoryImpl

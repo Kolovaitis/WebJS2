@@ -1,4 +1,4 @@
-const { Pool } = require('pg');
+const {Pool} = require('pg');
 const DatasourceBase = require("../datasourceBase")
 
 const pool = new Pool({
@@ -14,26 +14,34 @@ class DBDatasource extends DatasourceBase {
         const client = await pool.connect()
         const result = await client.query('SELECT * FROM posts')
         console.log(result)
-        return  (result) ? result.rows : null
+        return (result) ? result.rows : null
     }
 
-    getComments(postId) {
-        let neededComments = []
-        for (let i = 0; i < this._comments.length; i++) {
-            let comment = this._comments[i]
-            if (comment.postId == postId) {
-                neededComments.push(comment)
-            }
-        }
-        return neededComments.reverse()
+    async getComments(postId) {
+        const client = await pool.connect()
+        const result = await client.query('SELECT * FROM comments')
+        console.log(result)
+        return (result) ? result.rows : null
     }
 
-    addComment(text, author, postId) {
-        this._comments.push({text: text, author: author, postId: postId})
+    async addComment(text, author, postId) {
+        const client = await pool.connect()
+        const result = await client.query('INSERT INTO comments (postId, text, author) VALUES (' + postId + ', ' + text + ', ' + author + ')')
+        console.log(result)
+        return result
     }
 
-    addPost(name, description, image) {
-        this._posts.push({name: name, description: description, image: image, id: this._posts.length})
+    async addPost(name, description, image) {
+        const client = await pool.connect()
+        const result = await client.query('INSERT INTO posts (name, description, image) VALUES (' + name + ', ' + description + ', ' + image + ')')
+        console.log(result)
+        return result
+    }
+    async getPost(id) {
+        const client = await pool.connect()
+        const result = await client.query('SELECT * FROM posts where id = '+id)
+        console.log(result)
+        return (result) ? result.rows[0] : null
     }
 }
 

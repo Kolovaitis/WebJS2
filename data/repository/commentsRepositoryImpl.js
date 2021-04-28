@@ -6,12 +6,12 @@ class CommentsRepositoryImpl extends CommentsRepository {
         this.datasource = datasource
     }
 
-    getComments(postId) {
-        return this.datasource.getComments(postId)
+    async getComments(postId) {
+        return await this.datasource.getComments(postId)
     }
 
-    addComment(comment) {
-        this.datasource.addComment(comment.text, comment.author, comment.postId)
+    async addComment(comment) {
+        await this.datasource.addComment(comment.text, comment.author, comment.postId)
     }
 }
 module.exports = CommentsRepositoryImpl

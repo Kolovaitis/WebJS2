@@ -4,8 +4,8 @@ class GetPostUsecase{
         this.postsRepository = postsRepository
     }
 
-    invoke(postId){
-        let post = this.postsRepository.getPost(postId)
+    async invoke(postId){
+        let post = await this.postsRepository.getPost(postId)
         if(post === undefined) {
             throw "not found"
         }

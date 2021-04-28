@@ -31,59 +31,62 @@ app.use(express.static("static"))
 
 app.get("/all", function (request, response) {
     console.log("all posts:")
-    getPostsUsecase.invoke().then(function (result){
+    getPostsUsecase.invoke().then(function (result) {
         response.json(result)
         response.end()
-    }).catch(function(e){
+    }).catch(function (e) {
         response.status(500).send("internal server error");
     })
 })
 
-app.post("/", function (request, response) {
+app.post("/post", function (request, response) {
     let body = request.body
-    try {
-        let post = {name: body.name, description: body.description, image: body.image}
-        if(post.description===undefined || post.name===undefined || post.image===undefined){
-            response.status(400).send("invalid parameters");
-        }
-        addPostUsecase.invoke(post)
-        response.end();
-    } catch (e) {
-        response.status(500).send("internal server error");
+    let post = {name: body.name, description: body.description, image: body.image}
+    if (post.description === undefined || post.name === undefined || post.image === undefined) {
+        response.status(400).send("invalid parameters");
     }
+    addPostUsecase.invoke(post).then(function () {
+        response.end()
+    }).catch(function (e) {
+        response.status(500).send("internal server error");
+
+    })
+
 
 })
 
 app.get("/post/:id", function (request, response) {
-    try {
-        response.json(getPostUsecase.invoke(request.params.id))
-    } catch (e) {
+    getPostUsecase.invoke(request.params.id).then(function (result) {
+        response.json(result)
+        response.end()
+    }).catch(function (e) {
         if (e === "not found") {
             response.status(404).send("not found")
         }
         response.status(500).send("internal server error")
-    }
+    })
 })
 app.get("/post/comments/:id", function (request, response) {
-    try {
-        response.json(getCommentsUsecase.invoke(request.params.id))
-    } catch (e) {
+    getCommentsUsecase.invoke(request.params.id).then(function (result) {
+        response.json(result)
+        response.end()
+    }).catch(function (e) {
         response.status(500).send("internal server error")
-    }
+    })
 })
 
 app.post("/post/:id", function (request, response) {
     let body = request.body
-    try {
-        let comment = {text: body.text, author: body.author, postId: request.params.id}
-        if(comment.description===undefined || comment.name===undefined || comment.image===undefined){
-            response.status(400).send("invalid parameters");
-        }
-        addCommentUsecase.invoke(comment)
-        response.end();
-    } catch (e) {
-        response.status(500).send("internal server error");
+    let comment = {text: body.text, author: body.author, postId: request.params.id}
+    if (comment.description === undefined || comment.name === undefined || comment.image === undefined) {
+        response.status(400).send("invalid parameters");
     }
+    addCommentUsecase.invoke(comment).then(function () {
+        response.end()
+    }).catch(function (e) {
+        response.status(500).send("internal server error");
+    })
+
 })
 
 app.listen(PORT)
