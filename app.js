@@ -13,6 +13,7 @@ const { check, validationResult } = require("express-validator");
 const authMiddleware = require("./middleware/auth.middleware");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const corsMiddleware = require('./middleware/cors.middleware')
 
 
 // can't find di
@@ -32,7 +33,7 @@ const app = express()
 
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
-
+app.use(corsMiddleware)
 app.use(express.static("static"))
 
 app.get("/all", function (request, response) {
