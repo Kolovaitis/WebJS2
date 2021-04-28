@@ -86,7 +86,7 @@ app.get("/post/comments/:id",authMiddleware, function (request, response) {
 app.post("/post/:id", authMiddleware, function (request, response) {
     let body = request.body
     let comment = {text: body.text, author: request.user.email, postId: request.params.id}
-    if (comment.description === undefined || comment.name === undefined || comment.image === undefined) {
+    if (comment.text === undefined || comment.author === undefined || comment.postId === undefined) {
         response.status(400).send("invalid parameters");
     }
     addCommentUsecase.invoke(comment).then(function () {
