@@ -120,8 +120,13 @@ app.post(
                     .json({ message: `User with email ${email} already exist` });
             }
             const hashPassword = await bcrypt.hash(password, 8);
-            await datasource.addUser(email, hashPassword);
-            return res.status(200).json({ message: "User was created" });
+            const user = await datasource.addUser(email, hashPassword);
+            const token = jwt.sign({ id: user.id }, secretKey, {
+                expiresIn: "1h",
+            });
+            return res.json({
+                token
+            });
         } catch (e) {
             console.log(e);
             res.status(500).send("internal server error");
@@ -145,11 +150,7 @@ app.post("/login", async (req, res) => {
             expiresIn: "1h",
         });
         return res.json({
-            token,
-            user: {
-                id: user.id,
-                email: user.email,
-            },
+            token
         });
     } catch (e) {
         console.log(e);

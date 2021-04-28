@@ -66,7 +66,7 @@ class DBDatasource extends DatasourceBase {
         console.log(query)
         const result = await client.query(query)
         console.log(result)
-        return result
+        return await this.getUser(email)
     }
 }
 
