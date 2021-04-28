@@ -1,10 +1,10 @@
 class DatasourceBase {
-    async get posts(){}
+    get posts(){}
 
-    async getComments(postId){}
+    getComments(postId){}
 
-    async addPost(name, description, image){}
+    addPost(name, description, image){}
 
-    async addComment(text, author, postId){}
+    addComment(text, author, postId){}
 }
 module.exports = DatasourceBase
