@@ -29,13 +29,12 @@ app.use(bodyParser.json())
 
 app.use(express.static("static"))
 
-app.get("/all", async function (request, response) {
-    try {
-        let posts = await getPostsUsecase.invoke()
-        response.json(posts)
-    }catch (e) {
+app.get("/all", function (request, response) {
+    getPostsUsecase.invoke().then(function (result){
+        response.json(result)
+    }).catch(function(e){
         response.status(500).send("internal server error");
-    }
+    })
 })
 
 app.post("/", function (request, response) {
