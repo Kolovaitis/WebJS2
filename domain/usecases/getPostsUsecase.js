@@ -5,6 +5,7 @@ class GetPostsUsecase{
     }
 
     async invoke(){
+        console.log("invoke usecase")
         return await this.postsRepository.getPosts;
     }
 }

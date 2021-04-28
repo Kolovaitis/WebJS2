@@ -8,7 +8,8 @@ class PostsRepositoryImpl extends PostsRepository {
     }
 
     async getPosts() {
-        return await this.datasource.posts
+        console.log("repository:")
+        return await this.datasource.getPosts()
     }
 
     addPost(post) {
