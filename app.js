@@ -36,7 +36,7 @@ app.use(bodyParser.json())
 app.use(corsMiddleware)
 app.use(express.static("static"))
 
-app.get("/all", function (request, response) {
+app.get("/all",authMiddleware, function (request, response) {
     console.log("all posts:")
     getPostsUsecase.invoke().then(function (result) {
         response.json(result)
@@ -46,7 +46,7 @@ app.get("/all", function (request, response) {
     })
 })
 
-app.post("/post", function (request, response) {
+app.post("/post",authMiddleware, function (request, response) {
     let body = request.body
     console.log(body)
     let post = {name: body.name, description: body.description, image: body.image}
@@ -63,7 +63,7 @@ app.post("/post", function (request, response) {
 
 })
 
-app.get("/post/:id", function (request, response) {
+app.get("/post/:id",authMiddleware, function (request, response) {
     getPostUsecase.invoke(request.params.id).then(function (result) {
         response.json(result)
         response.end()
@@ -74,7 +74,7 @@ app.get("/post/:id", function (request, response) {
         response.status(500).send("internal server error")
     })
 })
-app.get("/post/comments/:id", function (request, response) {
+app.get("/post/comments/:id",authMiddleware, function (request, response) {
     getCommentsUsecase.invoke(request.params.id).then(function (result) {
         response.json(result)
         response.end()
@@ -83,7 +83,7 @@ app.get("/post/comments/:id", function (request, response) {
     })
 })
 
-app.post("/post/:id", function (request, response) {
+app.post("/post/:id", authMiddleware, function (request, response) {
     let body = request.body
     let comment = {text: body.text, author: body.author, postId: request.params.id}
     if (comment.description === undefined || comment.name === undefined || comment.image === undefined) {
