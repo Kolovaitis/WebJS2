@@ -41,6 +41,7 @@ app.get("/all", function (request, response) {
 
 app.post("/post", function (request, response) {
     let body = request.body
+    console.log(body)
     let post = {name: body.name, description: body.description, image: body.image}
     if (post.description === undefined || post.name === undefined || post.image === undefined) {
         response.status(400).send("invalid parameters");
