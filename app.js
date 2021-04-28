@@ -30,8 +30,10 @@ app.use(bodyParser.json())
 app.use(express.static("static"))
 
 app.get("/all", function (request, response) {
+    console.log("all posts:")
     getPostsUsecase.invoke().then(function (result){
         response.json(result)
+        response.end()
     }).catch(function(e){
         response.status(500).send("internal server error");
     })
