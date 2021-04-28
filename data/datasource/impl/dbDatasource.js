@@ -13,7 +13,6 @@ class DBDatasource extends DatasourceBase {
     async getPosts() {
         const client = await pool.connect()
         const result = await client.query('SELECT * FROM posts')
-        Console.log("result of posts is" + result)
         return  (result) ? result.rows : null
     }
 
