@@ -26,7 +26,7 @@ class DBDatasource extends DatasourceBase {
 
     async addComment(text, author, postId) {
         const client = await pool.connect()
-        const result = await client.query('INSERT INTO comments (postId, text, author) VALUES (\'' + postId + '\', \'' + text + '\', \'' + author + '\')')
+        const result = await client.query('INSERT INTO comments (post_id, text, author) VALUES (\'' + postId + '\', \'' + text + '\', \'' + author + '\')')
         console.log(result)
         return result
     }
