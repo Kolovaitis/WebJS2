@@ -25,7 +25,7 @@ class StaticDatasource extends DatasourceBase {
         ]
     }
 
-    get posts() {
+    async getPosts() {
         let posts = []
         for (let i=0;i<this._posts.length;i++){
             posts.push(this._posts[i])

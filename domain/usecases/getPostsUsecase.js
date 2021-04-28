@@ -5,7 +5,7 @@ class GetPostsUsecase{
     }
 
     async invoke(){
-        return await this.postsRepository.posts;
+        return await this.postsRepository.getPosts;
     }
 }
 module.exports = GetPostsUsecase

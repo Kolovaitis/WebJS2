@@ -1,5 +1,5 @@
 class DatasourceBase {
-    get posts(){}
+    async getPosts(){}
 
     getComments(postId){}
 
