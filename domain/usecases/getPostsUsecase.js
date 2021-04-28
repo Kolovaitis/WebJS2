@@ -6,7 +6,7 @@ class GetPostsUsecase{
 
     async invoke(){
         console.log("invoke usecase")
-        return await this.postsRepository.getPosts;
+        return await this.postsRepository.getPosts();
     }
 }
 module.exports = GetPostsUsecase
