@@ -68,7 +68,7 @@ app.use(express.static("static"))
 //     })
 // });
 app.use(require('cors')())
-let server = require('http').createServer(app);
+let server = require('https').createServer(app);
 let io = require('socket.io')(server,{
     cors: {
         origin: "http://localhost:4200",
