@@ -67,8 +67,10 @@ app.use(express.static("static"))
 //         socket.disconnect()
 //     })
 // });
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+let server = require('http').createServer(app);
+console.log(server)
+let io = require('socket.io')(server);
+console.log(io)
 io.on('connection', function(client) {
     console.log('Client connected...');
 
