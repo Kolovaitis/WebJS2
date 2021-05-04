@@ -69,9 +69,12 @@ app.use(express.static("static"))
 // });
 app.use(require('cors')())
 let server = require('http').createServer(app);
-console.log(server)
-let io = require('socket.io')(server);
-console.log(io)
+let io = require('socket.io')(server,{
+    cors: {
+        origin: "http://localhost:4200",
+        methods: ["GET", "POST"]
+    }
+});
 io.on('connection', function(client) {
     console.log('Client connected...');
 
