@@ -83,17 +83,7 @@ app.use(express.static("static"))
 //     });
 //
 // });
-const io = require('socket.io')(app.listen(PORT))
-io.on('connection', (socket) => {
-    console.log('Client connected');
-    getPostsUsecase.invoke().then(function (result) {
-        socket.emit("all", result)
-        socket.disconnect()
-    }).catch(function (e) {
-        socket.error("all", e)
-        socket.disconnect()    })
-    socket.on('disconnect', () => console.log('Client disconnected'));
-});
+
 // app.get("/all",authMiddleware, function (request, response) {
 //     console.log("all posts:")
 //     getPostsUsecase.invoke().then(function (result) {
@@ -121,6 +111,46 @@ app.post("/post",authMiddleware, function (request, response) {
 
 })
 
+const {graphql, buildSchema} = require('graphql')
+const {graphqlHTTP} = require('express-graphql')
+
+const schema = buildSchema(`
+    type Article {
+        title: String
+        message: String
+        status: String
+        date: String
+    }
+    type Query{
+        getAllArticles: [Article]
+    }
+    type Mutation {
+        createArticle(title: String!, message: String!, status: String!, date: String!): Article
+    }
+`)
+app.get("/all",authMiddleware, function (request, response) {
+    console.log("all posts:")
+    getPostsUsecase.invoke().then(function (result) {
+        response.json(result)
+        response.end()
+    }).catch(function (e) {
+        response.status(500).send("internal server error");
+    })
+})
+const io = require('socket.io')(app.listen(PORT))
+io.on('connection', (socket) => {
+    console.log('Client connected');
+    socket.on("post",(id)=>{
+        getPostsUsecase.invoke().then(function (result) {
+            socket.emit("post", result)
+            socket.disconnect()
+        }).catch(function (e) {
+            socket.error("post", e)
+            socket.disconnect()    })
+    })
+
+    socket.on('disconnect', () => console.log('Client disconnected'));
+});
 app.get("/post/:id",authMiddleware, function (request, response) {
     getPostUsecase.invoke(request.params.id).then(function (result) {
         response.json(result)
