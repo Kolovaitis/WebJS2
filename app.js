@@ -67,6 +67,7 @@ app.use(express.static("static"))
 //         socket.disconnect()
 //     })
 // });
+app.use(require('cors')())
 let server = require('http').createServer(app);
 console.log(server)
 let io = require('socket.io')(server);
