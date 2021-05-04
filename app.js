@@ -50,24 +50,33 @@ app.use(express.static("static"))
 //     })
 //     ws.on('close', () => console.log('Client disconnected'));
 // });
-const http = require("http").Server(app);
-const socket = require("socket.io")(http, {
-    cors: {
-        origin: "*",
-    },
-});
+// const http = require("http").Server(app);
+// const socket = require("socket.io")(http, {
+//     cors: {
+//         origin: "*",
+//     },
+// });
+//
+// socket.on("connection", (socket) => {
+//     console.log("User connected");
+//     getPostsUsecase.invoke().then(function (result) {
+//         socket.emit("all", result)
+//         socket.disconnect()
+//     }).catch(function (e) {
+//         socket.emit("all", "error")
+//         socket.disconnect()
+//     })
+// });
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+io.on('connection', function(client) {
+    console.log('Client connected...');
 
-socket.on("connection", (socket) => {
-    console.log("User connected");
-    getPostsUsecase.invoke().then(function (result) {
-        socket.emit("all", result)
-        socket.disconnect()
-    }).catch(function (e) {
-        socket.emit("all", "error")
-        socket.disconnect()
-    })
-});
+    client.on('join', function(data) {
+        console.log(data);
+    });
 
+});
 // app.get("/all",authMiddleware, function (request, response) {
 //     console.log("all posts:")
 //     getPostsUsecase.invoke().then(function (result) {
