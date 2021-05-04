@@ -83,7 +83,7 @@ app.use(express.static("static"))
 //     });
 //
 // });
-const io = require('socket.io')(app)
+const io = require('socket.io')(app.listen(PORT))
 io.on('connection', (socket) => {
     console.log('Client connected');
     socket.on('disconnect', () => console.log('Client disconnected'));
@@ -230,4 +230,3 @@ app.get("/auth", authMiddleware, async (req, res) => {
     }
 });
 
-app.listen(PORT)
