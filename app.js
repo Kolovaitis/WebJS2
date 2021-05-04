@@ -141,7 +141,7 @@ const io = require('socket.io')(app.listen(PORT))
 io.on('connection', (socket) => {
     console.log('Client connected');
     socket.on("post",(id)=>{
-        getPostsUsecase.invoke().then(function (result) {
+        getPostUsecase.invoke(id).then(function (result) {
             socket.emit("post", result)
             socket.disconnect()
         }).catch(function (e) {
@@ -151,17 +151,17 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => console.log('Client disconnected'));
 });
-app.get("/post/:id",authMiddleware, function (request, response) {
-    getPostUsecase.invoke(request.params.id).then(function (result) {
-        response.json(result)
-        response.end()
-    }).catch(function (e) {
-        if (e === "not found") {
-            response.status(404).send("not found")
-        }
-        response.status(500).send("internal server error")
-    })
-})
+// app.get("/post/:id",authMiddleware, function (request, response) {
+//     getPostUsecase.invoke(request.params.id).then(function (result) {
+//         response.json(result)
+//         response.end()
+//     }).catch(function (e) {
+//         if (e === "not found") {
+//             response.status(404).send("not found")
+//         }
+//         response.status(500).send("internal server error")
+//     })
+// })
 app.get("/post/comments/:id",authMiddleware, function (request, response) {
     getCommentsUsecase.invoke(request.params.id).then(function (result) {
         response.json(result)
