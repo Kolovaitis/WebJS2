@@ -36,15 +36,31 @@ app.use(bodyParser.json())
 app.use(corsMiddleware)
 app.use(express.static("static"))
 
-app.get("/all",authMiddleware, function (request, response) {
-    console.log("all posts:")
+const http = require("http").Server(app);
+const socket = require("socket.io")(http, {
+    cors: {
+        origin: "*",
+    },
+});
+
+socket.on("connection", (socket) => {
+    console.log("User connected");
     getPostsUsecase.invoke().then(function (result) {
-        response.json(result)
-        response.end()
+        socket.emit("all", result)
     }).catch(function (e) {
-        response.status(500).send("internal server error");
+        socket.emit("all", "error")
     })
-})
+});
+
+// app.get("/all",authMiddleware, function (request, response) {
+//     console.log("all posts:")
+//     getPostsUsecase.invoke().then(function (result) {
+//         response.json(result)
+//         response.end()
+//     }).catch(function (e) {
+//         response.status(500).send("internal server error");
+//     })
+// })
 
 app.post("/post",authMiddleware, function (request, response) {
     let body = request.body
