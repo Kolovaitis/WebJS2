@@ -130,7 +130,7 @@ const schema = buildSchema(`
 `)
 const rootValue = {
     getAllPosts: async () => {
-        await getPostsUsecase.invoke()
+        return await getPostsUsecase.invoke()
     },
     createPost: async ({name, description, image}) => {
         await addPostUsecase.invoke({id, name, description, image})
