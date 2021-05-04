@@ -9,7 +9,7 @@ const GetCommentsUsecase = require("./domain/usecases/getCommentsUsecase")
 const AddCommentUsecase = require("./domain/usecases/addCommentUsecase")
 const PORT = process.env.PORT || 5000
 const secretKey = "mern-secret-key";
-const { check, validationResult } = require("express-validator");
+const {check, validationResult} = require("express-validator");
 const authMiddleware = require("./middleware/auth.middleware");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -94,41 +94,53 @@ app.use(express.static("static"))
 //     })
 // })
 
-app.post("/post",authMiddleware, function (request, response) {
-    let body = request.body
-    console.log(body)
-    let post = {name: body.name, description: body.description, image: body.image}
-    if (post.description === undefined || post.name === undefined || post.image === undefined) {
-        response.status(400).send("invalid parameters");
-    }else {
-        addPostUsecase.invoke(post).then(function () {
-            response.end()
-        }).catch(function (e) {
-            response.status(500).send("internal server error");
-
-        })
-    }
-
-})
+// app.post("/post",authMiddleware, function (request, response) {
+//     let body = request.body
+//     console.log(body)
+//     let post = {name: body.name, description: body.description, image: body.image}
+//     if (post.description === undefined || post.name === undefined || post.image === undefined) {
+//         response.status(400).send("invalid parameters");
+//     }else {
+//         addPostUsecase.invoke(post).then(function () {
+//             response.end()
+//         }).catch(function (e) {
+//             response.status(500).send("internal server error");
+//
+//         })
+//     }
+//
+// })
 
 const {graphql, buildSchema} = require('graphql')
 const {graphqlHTTP} = require('express-graphql')
 
 const schema = buildSchema(`
-    type Article {
-        title: String
-        message: String
-        status: String
-        date: String
+    type Post {
+        id: Int
+        image: String
+        name: String
+        description: String
     }
     type Query{
-        getAllArticles: [Article]
+        getAllPosts: [Post]
     }
     type Mutation {
-        createArticle(title: String!, message: String!, status: String!, date: String!): Article
+        createPost(id:Int!, name: String!, description: String!, image: String!)
     }
 `)
-app.get("/all",authMiddleware, function (request, response) {
+const rootValue = {
+    getAllPosts: async () => {
+        await getPostsUsecase.invoke()
+    },
+    createPost: async ({id, name, description, image}) => {
+        await addPostUsecase.invoke({id, name, description, image})
+    }
+}
+app.use(`/graphql`, graphqlHTTP({
+    rootValue, schema, graphiql: true
+}))
+
+app.get("/all", authMiddleware, function (request, response) {
     console.log("all posts:")
     getPostsUsecase.invoke().then(function (result) {
         response.json(result)
@@ -140,13 +152,14 @@ app.get("/all",authMiddleware, function (request, response) {
 const io = require('socket.io')(app.listen(PORT))
 io.on('connection', (socket) => {
     console.log('Client connected');
-    socket.on("post",(id)=>{
+    socket.on("post", (id) => {
         getPostUsecase.invoke(id).then(function (result) {
             socket.emit("post", result)
             socket.disconnect()
         }).catch(function (e) {
             socket.error("post", e)
-            socket.disconnect()    })
+            socket.disconnect()
+        })
     })
 
     socket.on('disconnect', () => console.log('Client disconnected'));
@@ -162,7 +175,7 @@ io.on('connection', (socket) => {
 //         response.status(500).send("internal server error")
 //     })
 // })
-app.get("/post/comments/:id",authMiddleware, function (request, response) {
+app.get("/post/comments/:id", authMiddleware, function (request, response) {
     getCommentsUsecase.invoke(request.params.id).then(function (result) {
         response.json(result)
         response.end()
@@ -189,27 +202,27 @@ app.post(
     "/registration",
     [
         check("email", "Uncorrected email").isEmail(),
-        check("password", "Incorrect password").isLength({ min: 1 }),
+        check("password", "Incorrect password").isLength({min: 1}),
     ],
     async (req, res) => {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                return res.status(400).json({ message: "Bad request", errors });
+                return res.status(400).json({message: "Bad request", errors});
             }
 
-            const { email, password } = req.body;
+            const {email, password} = req.body;
 
             const candidate = await datasource.getUser(email);
 
             if (candidate) {
                 return res
                     .status(400)
-                    .json({ message: `User with email ${email} already exist` });
+                    .json({message: `User with email ${email} already exist`});
             }
             const hashPassword = await bcrypt.hash(password, 8);
             const user = await datasource.addUser(email, hashPassword);
-            const token = jwt.sign({ id: user.id }, secretKey, {
+            const token = jwt.sign({id: user.id}, secretKey, {
                 expiresIn: "1h",
             });
             return res.json({
@@ -224,17 +237,17 @@ app.post(
 
 app.post("/login", async (req, res) => {
     try {
-        const { email, password } = req.body;
-        const user = await datasource.getUser( email );
+        const {email, password} = req.body;
+        const user = await datasource.getUser(email);
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({message: "User not found"});
         }
 
         const isPassValid = bcrypt.compareSync(password, user.password);
         if (!isPassValid) {
-            return res.status(404).json({ message: "Uncorrect password" });
+            return res.status(404).json({message: "Uncorrect password"});
         }
-        const token = jwt.sign({ id: user.id }, secretKey, {
+        const token = jwt.sign({id: user.id}, secretKey, {
             expiresIn: "1h",
         });
         return res.json({
@@ -250,7 +263,7 @@ app.get("/auth", authMiddleware, async (req, res) => {
     try {
         const user = await datasource.getUserById(req.user.id);
 
-        const token = jwt.sign({ id: user.id }, secretKey, {
+        const token = jwt.sign({id: user.id}, secretKey, {
             expiresIn: "1h",
         });
         return res.json({
