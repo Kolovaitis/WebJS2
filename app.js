@@ -36,36 +36,37 @@ app.use(bodyParser.json())
 app.use(corsMiddleware)
 app.use(express.static("static"))
 
-const { Server } = require('ws');
-
-const wss = new Server({ server:app });
-wss.on('connection', (ws) => {
-    console.log('Client connected');
-    getPostsUsecase.invoke().then(function (result) {
-        ws.emit("all", result)
-        ws.disconnect()
-    }).catch(function (e) {
-        ws.emit("all", "error")
-        ws.disconnect()
-    })
-    ws.on('close', () => console.log('Client disconnected'));
-});
-// const http = require("http").Server(app);
-// const socket = require("socket.io")(http, {
-//     cors: {
-//         origin: "*",
-//     },
-// });
+// const { Server } = require('ws');
 //
-// socket.on("connection", (socket) => {
-//     console.log("User connected");
+// const wss = new Server({ server:app });
+// wss.on('connection', (ws) => {
+//     console.log('Client connected');
 //     getPostsUsecase.invoke().then(function (result) {
-//         socket.emit("all", result)
+//         ws.emit("all", result)
+//         ws.disconnect()
 //     }).catch(function (e) {
-//         socket.emit("all", "error")
-//         socket.disconnect()
+//         ws.emit("all", "error")
+//         ws.disconnect()
 //     })
+//     ws.on('close', () => console.log('Client disconnected'));
 // });
+const http = require("http").Server(app);
+const socket = require("socket.io")(http, {
+    cors: {
+        origin: "*",
+    },
+});
+
+socket.on("connection", (socket) => {
+    console.log("User connected");
+    getPostsUsecase.invoke().then(function (result) {
+        socket.emit("all", result)
+        socket.disconnect()
+    }).catch(function (e) {
+        socket.emit("all", "error")
+        socket.disconnect()
+    })
+});
 
 // app.get("/all",authMiddleware, function (request, response) {
 //     console.log("all posts:")
