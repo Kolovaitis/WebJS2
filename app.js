@@ -66,22 +66,27 @@ app.use(express.static("static"))
 //         socket.emit("all", "error")
 //         socket.disconnect()
 //     })
+// // });
+// app.use(require('cors')())
+// let server = require('https').createServer(app);
+// let io = require('socket.io')(server,{
+//     cors: {
+//         origin: "http://localhost:4200",
+//         methods: ["GET", "POST"]
+//     }
 // });
-app.use(require('cors')())
-let server = require('https').createServer(app);
-let io = require('socket.io')(server,{
-    cors: {
-        origin: "http://localhost:4200",
-        methods: ["GET", "POST"]
-    }
-});
-io.on('connection', function(client) {
-    console.log('Client connected...');
-
-    client.on('join', function(data) {
-        console.log(data);
-    });
-
+// io.on('connection', function(client) {
+//     console.log('Client connected...');
+//
+//     client.on('join', function(data) {
+//         console.log(data);
+//     });
+//
+// });
+const io = require('socket.io')(app)
+io.on('connection', (socket) => {
+    console.log('Client connected');
+    socket.on('disconnect', () => console.log('Client disconnected'));
 });
 // app.get("/all",authMiddleware, function (request, response) {
 //     console.log("all posts:")
