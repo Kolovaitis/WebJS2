@@ -38,7 +38,7 @@ app.use(express.static("static"))
 
 const { Server } = require('ws');
 
-const wss = new Server({ app });
+const wss = new Server({ server:app });
 wss.on('connection', (ws) => {
     console.log('Client connected');
     getPostsUsecase.invoke().then(function (result) {
