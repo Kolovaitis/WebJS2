@@ -86,6 +86,12 @@ app.use(express.static("static"))
 const io = require('socket.io')(app.listen(PORT))
 io.on('connection', (socket) => {
     console.log('Client connected');
+    getPostsUsecase.invoke().then(function (result) {
+        socket.emit("all", result)
+        socket.disconnect()
+    }).catch(function (e) {
+        socket.error("all", e)
+        socket.disconnect()    })
     socket.on('disconnect', () => console.log('Client disconnected'));
 });
 // app.get("/all",authMiddleware, function (request, response) {
