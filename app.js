@@ -134,7 +134,7 @@ const rootValue = {
     },
     createPost: async ({name, description, image}) => {
         await addPostUsecase.invoke({id, name, description, image})
-        return {}
+        return {name, description, image, id:0}
     }
 }
 app.use(`/graphql`, graphqlHTTP({
