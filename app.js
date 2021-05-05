@@ -94,22 +94,22 @@ app.use(express.static("static"))
 //     })
 // })
 
-// app.post("/post",authMiddleware, function (request, response) {
-//     let body = request.body
-//     console.log(body)
-//     let post = {name: body.name, description: body.description, image: body.image}
-//     if (post.description === undefined || post.name === undefined || post.image === undefined) {
-//         response.status(400).send("invalid parameters");
-//     }else {
-//         addPostUsecase.invoke(post).then(function () {
-//             response.end()
-//         }).catch(function (e) {
-//             response.status(500).send("internal server error");
-//
-//         })
-//     }
-//
-// })
+app.post("/post",authMiddleware, function (request, response) {
+    let body = request.body
+    console.log(body)
+    let post = {name: body.name, description: body.description, image: body.image}
+    if (post.description === undefined || post.name === undefined || post.image === undefined) {
+        response.status(400).send("invalid parameters");
+    }else {
+        addPostUsecase.invoke(post).then(function () {
+            response.end()
+        }).catch(function (e) {
+            response.status(500).send("internal server error");
+
+        })
+    }
+
+})
 
 const {graphql, buildSchema} = require('graphql')
 const {graphqlHTTP} = require('express-graphql')
@@ -124,18 +124,10 @@ const schema = buildSchema(`
     type Query{
         getAllPosts: [Post]
     }
-    type Mutation {
-        createPost(name: String!, description: String!, image: String!):Post
-    }
 `)
 const rootValue = {
     getAllPosts: async () => {
         return await getPostsUsecase.invoke()
-    },
-    createPost: async ({name, description, image}) => {
-        console.log("create post")
-        await addPostUsecase.invoke({id, name, description, image})
-        return {name, description, image, id:0}
     }
 }
 app.use(`/graphql`, graphqlHTTP({
