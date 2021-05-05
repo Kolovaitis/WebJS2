@@ -133,6 +133,7 @@ const rootValue = {
         return await getPostsUsecase.invoke()
     },
     createPost: async ({name, description, image}) => {
+        console.log("create post")
         await addPostUsecase.invoke({id, name, description, image})
         return {name, description, image, id:0}
     }
